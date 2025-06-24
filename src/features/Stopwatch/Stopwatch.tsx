@@ -10,11 +10,10 @@ import timerSound from "../../assets/timer_expired.mp3";
 import buttonSound from "../../assets/button_click.mp3";
 
 type Interval = NodeJS.Timeout | null;
-// type TimerMode = "idle" | "focus" | "break";
+type TimerMode = "idle" | "focus" | "break";
 
 const Stopwatch = () => {
-  const [running, setRunning] = useState(false);
-  const [paused, setPaused] = useState(true);
+  const [mode, setMode] = useState<TimerMode>("idle");
   const [time, setTime] = useState(0);
   const [breakTime, setBreakTime] = useState(0);
 
@@ -32,92 +31,71 @@ const Stopwatch = () => {
     let interval: Interval = null;
     lastTimestampRef.current = Date.now();
 
-    if (running && paused === false) {
+    if (mode === "focus") {
       interval = setInterval(() => {
         const now = Date.now();
         const delta = now - lastTimestampRef.current;
         lastTimestampRef.current = now;
         setTime((time) => time + delta);
-      }, 50);
-    } else if (interval) {
-      clearInterval(interval);
+      }, 100);
+    } else if (mode === "break") {
+      interval = setInterval(() => {
+        const now = Date.now();
+        const delta = now - lastTimestampRef.current;
+        lastTimestampRef.current = now;
+
+        setBreakTime((time) => {
+          const updated = time - delta;
+          if (updated <= 0) {
+            timerAudioRef.current?.play();
+            setMode("idle");
+            return 0;
+          }
+          return updated;
+        });
+      }, 100);
+    } else {
+      if (interval) {
+        clearInterval(interval);
+      }
     }
     return () => {
       if (interval) {
         clearInterval(interval);
       }
     };
-  }, [running, paused]);
-
-  useEffect(() => {
-    let interval: Interval = null;
-    lastTimestampRef.current = Date.now();
-
-    if (paused === true && running === true) {
-      if (breakTime >= 10) {
-        interval = setInterval(() => {
-          const now = Date.now();
-          const delta = now - lastTimestampRef.current;
-          lastTimestampRef.current = now;
-
-          setBreakTime((prevTime) => {
-            const updated = prevTime - delta;
-            if (updated <= 0) {
-              timerAudioRef.current?.play();
-              setRunning(false);
-              return 0;
-            }
-            return updated;
-          });
-        }, 50);
-      } else {
-        timerAudioRef.current?.play();
-
-        setRunning(false);
-        setBreakTime(0);
-      }
-    } else if (interval) {
-      clearInterval(interval);
-    }
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [running, paused, breakTime]);
+  }, [mode]);
 
   const startStopwatch = () => {
     buttonAudioRef.current?.play();
-    setRunning(true);
-    setPaused(false);
+    setMode("focus");
   };
 
-  const resumeStopwatch = () => {
-    buttonAudioRef.current?.play();
-    setPaused(true);
-    setBreakTime(time / 5);
+  const BREAK_DIVISOR = 1;
+  const BREAK_TIME = time / BREAK_DIVISOR;
+
+  const startBreak = () => {
+    const breakDuration = BREAK_TIME;
     setTime(0);
-    if (paused) {
-      setRunning(false);
-    }
+    setBreakTime(breakDuration > 1000 ? breakDuration : 10000); // fallback
+    setMode("break");
   };
 
-  const restartStopwatch = () => {
+  const resetStopwatch = () => {
     buttonAudioRef.current?.play();
-    setRunning(false);
-    setPaused(true);
     setTime(0);
+    setMode("idle");
   };
 
   const formatted = formatStopwatchTime(time);
   const formattedBreak = formatStopwatchTime(breakTime);
-  const { minutes } = formatStopwatchTime(time / 5);
+  const { totalMinutes } = formatStopwatchTime(BREAK_TIME);
 
   return (
     <>
       <div>
         <div>
-          {paused && running === true ? (
+          {mode === "break" ? (
             <div className="time-display text-6xl">
               {formatted.hours !== "00" ? (
                 <span className="hours">{formattedBreak.hours}:</span>
@@ -129,44 +107,48 @@ const Stopwatch = () => {
             </div>
           ) : (
             <div className="time-display text-6xl">
-              {formatted.hours !== "00" ? (
+              {formatted.hours !== "00" && (
                 <span className="hours">{formatted.hours}:</span>
-              ) : (
-                <span></span>
               )}
               <span className="minutes">{formatted.minutes}:</span>
               <span className="seconds">{formatted.seconds}</span>
             </div>
           )}
-          {running ? (
-            <Button onClick={resumeStopwatch}>
-              {paused ? <RiSkipForwardFill /> : <FaCoffee />}
+          {mode === "focus" && (
+            <>
+              <Button onClick={startBreak}>
+                <FaCoffee />
+              </Button>
+              <Button onClick={resetStopwatch}>
+                <FaRotateLeft />
+              </Button>
+            </>
+          )}
+          {mode === "break" && (
+            <Button onClick={resetStopwatch}>
+              <RiSkipForwardFill />
             </Button>
-          ) : (
+          )}
+          {mode === "idle" && (
             <Button onClick={startStopwatch}>
               <FaPlay />
             </Button>
           )}
-          {running && paused === false && (
-            <Button onClick={restartStopwatch}>
-              <FaRotateLeft />
-            </Button>
-          )}
         </div>
-        {paused === false && running === true && (
-          <Badge>
-            Focus <TbFocus2 />
-          </Badge>
+        {mode === "focus" && (
+          <>
+            <Badge>
+              Focus <TbFocus2 />
+            </Badge>
+            <div>
+              <Break breakTime={totalMinutes} />
+            </div>
+          </>
         )}
-        {paused === true && running === true && (
+        {mode === "break" && (
           <Badge variant="secondary">
             Break <FaCoffee />
           </Badge>
-        )}
-        {paused === false && (
-          <div>
-            <Break breakTime={minutes} />
-          </div>
         )}
       </div>
     </>
@@ -186,9 +168,12 @@ function formatStopwatchTime(ms: number) {
   const minutesString = ("00" + minutes).slice(-2);
   const secondsStr = ("00" + seconds).slice(-2);
 
+  const totalMinutes = Math.floor(ms / 60000);
+
   return {
     hours: hoursStr,
     minutes: minutesString,
     seconds: secondsStr,
+    totalMinutes,
   };
 }
