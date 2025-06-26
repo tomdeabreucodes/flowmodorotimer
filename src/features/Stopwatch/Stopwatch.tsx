@@ -8,11 +8,12 @@ import { Badge } from "../../components/ui/badge";
 import { TbFocus2 } from "react-icons/tb";
 import timerSound from "../../assets/timer_expired.mp3";
 import buttonSound from "../../assets/button_click.mp3";
+import type { settingsType } from "../SettingsEditor/hooks/SettingsEditor.tsx";
 
 type Interval = NodeJS.Timeout | null;
 type TimerMode = "idle" | "focus" | "break";
 
-const Stopwatch = () => {
+const Stopwatch = ({ settings }: settingsType) => {
   const [mode, setMode] = useState<TimerMode>("idle");
   const [time, setTime] = useState(0);
   const [breakTime, setBreakTime] = useState(0);
@@ -71,13 +72,14 @@ const Stopwatch = () => {
     setMode("focus");
   };
 
-  const BREAK_DIVISOR = 1;
+  const BREAK_DIVISOR = settings.breakTimeDivisor;
   const BREAK_TIME = time / BREAK_DIVISOR;
 
   const startBreak = () => {
+    buttonAudioRef.current?.play();
     const breakDuration = BREAK_TIME;
     setTime(0);
-    setBreakTime(breakDuration > 1000 ? breakDuration : 10000); // fallback
+    setBreakTime(breakDuration > 1000 ? breakDuration : 1500); // fallback
     setMode("break");
   };
 

@@ -1,13 +1,18 @@
 import Timer from "./features/Stopwatch/Stopwatch";
 // import type { TaskType } from "./Task";
 import Tasks from "./features/Tasks/Tasks";
+import SettingsEditor from "./features/SettingsEditor/hooks/SettingsEditor";
+
+import useSettings from "./features/SettingsEditor/useSettings";
 
 function App() {
+  const settings = useSettings();
   return (
     <>
       <h1 className="text-4xl font-bold">Flowtime</h1>
-      <Timer />
-      <Tasks></Tasks>
+      <Timer settings={settings} />
+      <Tasks />
+      <SettingsEditor settings={settings} />
     </>
   );
 }
