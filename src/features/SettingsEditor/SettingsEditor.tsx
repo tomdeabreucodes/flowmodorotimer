@@ -13,7 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { FaCog } from "react-icons/fa";
-import type useSettings from "../useSettings";
+import type useSettings from "./hooks/useSettings";
 
 export type Settings = ReturnType<typeof useSettings>;
 

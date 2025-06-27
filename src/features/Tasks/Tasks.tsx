@@ -66,6 +66,19 @@ const Tasks = () => {
     updateTasks(updated);
   };
 
+  const deleteTask = (id: string) => {
+    const targetTask = tasks.find((task) => task.id === id);
+    const activeDeleted = targetTask?.active || false;
+
+    const updated = tasks.filter((task) => task.id !== id);
+
+    if (activeDeleted && updated.length > 0) {
+      updated[0] = { ...updated[0], active: true };
+    }
+
+    updateTasks(updated);
+  };
+
   return (
     <>
       {tasks.map((task) => {
@@ -75,6 +88,7 @@ const Tasks = () => {
             task={task}
             onComplete={toggleTaskCompletion}
             onActivate={toggleTaskActivation}
+            onDelete={deleteTask}
           ></Task>
         );
       })}

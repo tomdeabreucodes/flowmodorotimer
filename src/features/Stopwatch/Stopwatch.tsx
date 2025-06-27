@@ -8,7 +8,7 @@ import { Badge } from "../../components/ui/badge";
 import { TbFocus2 } from "react-icons/tb";
 import timerSound from "../../assets/timer_expired.mp3";
 import buttonSound from "../../assets/button_click.mp3";
-import type { settingsType } from "../SettingsEditor/hooks/SettingsEditor.tsx";
+import type { settingsType } from "../SettingsEditor/SettingsEditor.tsx";
 
 type Interval = NodeJS.Timeout | null;
 type TimerMode = "idle" | "focus" | "break";

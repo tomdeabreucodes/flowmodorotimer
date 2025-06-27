@@ -1,9 +1,9 @@
 import Timer from "./features/Stopwatch/Stopwatch";
 // import type { TaskType } from "./Task";
 import Tasks from "./features/Tasks/Tasks";
-import SettingsEditor from "./features/SettingsEditor/hooks/SettingsEditor";
+import SettingsEditor from "./features/SettingsEditor/SettingsEditor";
 
-import useSettings from "./features/SettingsEditor/useSettings";
+import useSettings from "./features/SettingsEditor/hooks/useSettings";
 
 function App() {
   const settings = useSettings();
