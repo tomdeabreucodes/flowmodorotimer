@@ -32,9 +32,8 @@ const Stopwatch = ({ settings }: settingsType) => {
   }, []);
 
   useEffect(() => {
-    if (timerSound) {
-      timerAudioRef.current = timerSound;
-    }
+    if (!timerSound) return;
+    timerAudioRef.current = timerSound;
   }, [timerSound]);
 
   useEffect(() => {
