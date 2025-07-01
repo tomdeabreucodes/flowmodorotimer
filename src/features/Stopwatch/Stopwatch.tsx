@@ -6,7 +6,7 @@ import { FaCoffee } from "react-icons/fa";
 import { RiSkipForwardFill } from "react-icons/ri";
 import { Badge } from "../../components/ui/badge";
 import { TbFocus2 } from "react-icons/tb";
-import timerSound from "../../assets/timer_expired.mp3";
+import timerSound from "../../assets/simple_chime.mp3";
 import buttonSound from "../../assets/button_click.mp3";
 import type { settingsType } from "../SettingsEditor/SettingsEditor.tsx";
 

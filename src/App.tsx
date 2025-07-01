@@ -9,7 +9,7 @@ function App() {
   const settings = useSettings();
   return (
     <>
-      <h1 className="text-4xl font-bold">Flowtime</h1>
+      <h1 className="text-4xl font-bold font-mono">Flowtime</h1>
       <Timer settings={settings} />
       <Tasks />
       <SettingsEditor settings={settings} />

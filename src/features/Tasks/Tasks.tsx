@@ -45,7 +45,7 @@ const Tasks = () => {
     localStorage.setItem("tasks", JSON.stringify(updated));
   };
 
-  const toggleTaskCompletion = (id: CryptoUUID) => {
+  const handleTaskCompletion = (id: CryptoUUID) => {
     const updated = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, completed: !task.completed };
@@ -55,7 +55,7 @@ const Tasks = () => {
     updateTasks(updated);
   };
 
-  const toggleTaskActivation = (id: CryptoUUID) => {
+  const handleTaskActivation = (id: CryptoUUID) => {
     const updated = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, active: true };
@@ -66,7 +66,7 @@ const Tasks = () => {
     updateTasks(updated);
   };
 
-  const deleteTask = (id: string) => {
+  const handleDeleteTask = (id: string) => {
     const targetTask = tasks.find((task) => task.id === id);
     const activeDeleted = targetTask?.active || false;
 
@@ -81,18 +81,6 @@ const Tasks = () => {
 
   return (
     <>
-      {tasks.map((task) => {
-        return (
-          <Task
-            key={task.id}
-            task={task}
-            onComplete={toggleTaskCompletion}
-            onActivate={toggleTaskActivation}
-            onDelete={deleteTask}
-          ></Task>
-        );
-      })}
-
       <Input
         id="newTaskInput"
         type="text"
@@ -101,6 +89,17 @@ const Tasks = () => {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleNewTaskSubmission}
       />
+      {tasks.map((task) => {
+        return (
+          <Task
+            key={task.id}
+            task={task}
+            onComplete={handleTaskCompletion}
+            onActivate={handleTaskActivation}
+            onDelete={handleDeleteTask}
+          ></Task>
+        );
+      })}
     </>
   );
 };

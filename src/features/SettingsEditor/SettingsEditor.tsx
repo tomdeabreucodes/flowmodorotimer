@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { FaCog } from "react-icons/fa";
 import type useSettings from "./hooks/useSettings";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export type Settings = ReturnType<typeof useSettings>;
 
@@ -25,11 +26,13 @@ export default function SettingsEditor({ settings }: settingsType) {
   const [open, setOpen] = useState(false);
 
   const saveSettings = () => {
-    localStorage.setItem(
-      "flowtime_settings",
-      JSON.stringify(settings.draftBreakTimeDivisor)
-    );
+    const draftSettings = {
+      breakTimeDivisor: settings.draftBreakTimeDivisor,
+      soundEffect: settings.draftSoundEffect,
+    };
+    localStorage.setItem("flowtime_settings", JSON.stringify(draftSettings));
     settings.setBreakTimeDivisor(settings.draftBreakTimeDivisor);
+    settings.setSoundEffect(settings.draftSoundEffect);
     setOpen(false);
   };
 
@@ -44,11 +47,10 @@ export default function SettingsEditor({ settings }: settingsType) {
         <form action={saveSettings}>
           <DialogHeader>
             <DialogTitle>Settings</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
+            <DialogDescription className="mb-4"></DialogDescription>
           </DialogHeader>
-          <div className="flex">
+          <Label className="font-semibold">Breaks</Label>
+          <div className="flex mb-4">
             <div className="flex">
               <Label htmlFor="name-1" className="mr-2">
                 {" "}
@@ -65,6 +67,26 @@ export default function SettingsEditor({ settings }: settingsType) {
                 className="w-16"
               />
             </div>
+          </div>
+          <Label className="font-semibold mb-4">Sound effect</Label>
+          <div className="mb-4">
+            <RadioGroup
+              defaultValue={settings.draftSoundEffect}
+              onValueChange={(e) => settings.setDraftSoundEffect(e)}
+            >
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="simple_chime" id="r1" />
+                <Label htmlFor="r1">Simple chime</Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="digital_watch_alarm" id="r2" />
+                <Label htmlFor="r2">Digital watch alarm</Label>
+              </div>
+              <div className="flex items-center gap-3">
+                <RadioGroupItem value="egg_timer" id="r3" />
+                <Label htmlFor="r3">Egg timer</Label>
+              </div>
+            </RadioGroup>
           </div>
           <DialogFooter>
             <DialogClose asChild>

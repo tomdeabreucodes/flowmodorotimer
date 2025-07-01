@@ -4,12 +4,21 @@ export default function useSettings() {
   const [draftBreakTimeDivisor, setDraftBreakTimeDivisor] =
     useState(breakTimeDivisor);
 
+  const [soundEffect, setSoundEffect] = useState<string>("simple_chime");
+  const [draftSoundEffect, setDraftSoundEffect] =
+    useState<string>("simple_chime");
+
   useEffect(() => {
-    const storedBreakTimeDivisor = localStorage.getItem("flowtime_settings");
-    if (storedBreakTimeDivisor) {
-      const parsedBreakTimeDivisor = JSON.parse(storedBreakTimeDivisor);
+    const storedSettings = localStorage.getItem("flowtime_settings");
+    if (storedSettings) {
+      const parsedSettings = JSON.parse(storedSettings);
+      const parsedBreakTimeDivisor = parsedSettings["breakTimeDivisor"];
       setBreakTimeDivisor(parsedBreakTimeDivisor);
       setDraftBreakTimeDivisor(parsedBreakTimeDivisor);
+
+      const parsedSoundEffect = parsedSettings["soundEffect"];
+      setSoundEffect(parsedSoundEffect);
+      setDraftSoundEffect(parsedSoundEffect);
     }
   }, []);
 
@@ -18,5 +27,9 @@ export default function useSettings() {
     setBreakTimeDivisor,
     draftBreakTimeDivisor,
     setDraftBreakTimeDivisor,
+    soundEffect,
+    setSoundEffect,
+    draftSoundEffect,
+    setDraftSoundEffect,
   };
 }
