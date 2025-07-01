@@ -6,9 +6,10 @@ import { FaCoffee } from "react-icons/fa";
 import { RiSkipForwardFill } from "react-icons/ri";
 import { Badge } from "../../components/ui/badge";
 import { TbFocus2 } from "react-icons/tb";
-import timerSound from "../../assets/simple_chime.mp3";
+// import timerSound from "../../assets/simple_chime.mp3";
 import buttonSound from "../../assets/button_click.mp3";
 import type { settingsType } from "../SettingsEditor/SettingsEditor.tsx";
+import useSoundEffect from "./useSoundEffect.ts";
 
 type Interval = NodeJS.Timeout | null;
 type TimerMode = "idle" | "focus" | "break";
@@ -18,15 +19,23 @@ const Stopwatch = ({ settings }: settingsType) => {
   const [time, setTime] = useState(0);
   const [breakTime, setBreakTime] = useState(0);
 
+  const lastTimestampRef = useRef(Date.now());
+
   const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
   const timerAudioRef = useRef<HTMLAudioElement | null>(null);
 
-  const lastTimestampRef = useRef(Date.now());
+  const timerSound = useSoundEffect(settings.soundEffect);
+  // console.log(timerSound);
 
   useEffect(() => {
     buttonAudioRef.current = new Audio(buttonSound);
-    timerAudioRef.current = new Audio(timerSound);
   }, []);
+
+  useEffect(() => {
+    if (timerSound) {
+      timerAudioRef.current = timerSound;
+    }
+  }, [timerSound]);
 
   useEffect(() => {
     let interval: Interval = null;

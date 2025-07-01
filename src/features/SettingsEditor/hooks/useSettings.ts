@@ -1,12 +1,13 @@
+import type { SoundEffect } from "@/features/Stopwatch/useSoundEffect";
 import { useEffect, useState } from "react";
 export default function useSettings() {
   const [breakTimeDivisor, setBreakTimeDivisor] = useState<number>(5);
   const [draftBreakTimeDivisor, setDraftBreakTimeDivisor] =
     useState(breakTimeDivisor);
 
-  const [soundEffect, setSoundEffect] = useState<string>("simple_chime");
+  const [soundEffect, setSoundEffect] = useState<SoundEffect>("simple_chime");
   const [draftSoundEffect, setDraftSoundEffect] =
-    useState<string>("simple_chime");
+    useState<SoundEffect>("simple_chime");
 
   useEffect(() => {
     const storedSettings = localStorage.getItem("flowtime_settings");

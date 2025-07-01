@@ -15,6 +15,7 @@ import { useState } from "react";
 import { FaCog } from "react-icons/fa";
 import type useSettings from "./hooks/useSettings";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import type { SoundEffect } from "../Stopwatch/useSoundEffect";
 
 export type Settings = ReturnType<typeof useSettings>;
 
@@ -72,7 +73,9 @@ export default function SettingsEditor({ settings }: settingsType) {
           <div className="mb-4">
             <RadioGroup
               defaultValue={settings.draftSoundEffect}
-              onValueChange={(e) => settings.setDraftSoundEffect(e)}
+              onValueChange={(value) =>
+                settings.setDraftSoundEffect(value as SoundEffect)
+              }
             >
               <div className="flex items-center gap-3">
                 <RadioGroupItem value="simple_chime" id="r1" />
