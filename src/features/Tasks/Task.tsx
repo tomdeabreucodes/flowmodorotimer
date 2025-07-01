@@ -24,7 +24,10 @@ const Task = ({ task, onComplete, onActivate, onDelete }: TaskProps) => {
         onClick={() => onActivate(task.id)}
         className={`cursor-pointer ${task.active ? "text-green-500" : ""}`}
       />
-      <FaTrashAlt onClick={() => onDelete(task.id)} />
+      <FaTrashAlt
+        className="cursor-pointer"
+        onClick={() => onDelete(task.id)}
+      />
     </div>
   );
 };

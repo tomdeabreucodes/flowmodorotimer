@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import Task from "./Task";
 import { Input } from "../../components/ui/input";
+import tasksReducer from "./tasksReducer";
 
 export type CryptoUUID = `${string}-${string}-${string}-${string}-${string}`;
 export type TaskType = {
@@ -11,72 +12,33 @@ export type TaskType = {
 };
 
 const Tasks = () => {
-  const [tasks, setTasks] = useState<TaskType[]>([]);
+  // const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [tasks, dispatch] = useReducer(tasksReducer, []);
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
-    const initialTasks = localStorage.getItem("tasks");
-    if (initialTasks) {
-      setTasks(JSON.parse(initialTasks));
-    }
+    dispatch({ type: "load" });
   }, []);
 
   const handleNewTaskSubmission = (
     e: React.KeyboardEvent<HTMLInputElement>
   ) => {
     if (e.key === "Enter") {
-      setTasks((currentTaskList) => {
-        const newTask: TaskType = {
-          id: crypto.randomUUID(),
-          name: inputValue,
-          completed: false,
-          active: currentTaskList.length === 0 ? true : false,
-        };
-        const newTaskList = [...currentTaskList, newTask];
-        localStorage.setItem("tasks", JSON.stringify(newTaskList));
-        return newTaskList;
-      });
+      dispatch({ type: "new", newTaskName: inputValue });
       setInputValue("");
     }
   };
 
-  const updateTasks = (updated: TaskType[]) => {
-    setTasks(updated);
-    localStorage.setItem("tasks", JSON.stringify(updated));
-  };
-
   const handleTaskCompletion = (id: CryptoUUID) => {
-    const updated = tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, completed: !task.completed };
-      }
-      return task;
-    });
-    updateTasks(updated);
+    dispatch({ type: "complete", id: id });
   };
 
   const handleTaskActivation = (id: CryptoUUID) => {
-    const updated = tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, active: true };
-      } else {
-        return { ...task, active: false };
-      }
-    });
-    updateTasks(updated);
+    dispatch({ type: "activate", id: id });
   };
 
-  const handleDeleteTask = (id: string) => {
-    const targetTask = tasks.find((task) => task.id === id);
-    const activeDeleted = targetTask?.active || false;
-
-    const updated = tasks.filter((task) => task.id !== id);
-
-    if (activeDeleted && updated.length > 0) {
-      updated[0] = { ...updated[0], active: true };
-    }
-
-    updateTasks(updated);
+  const handleDeleteTask = (id: CryptoUUID) => {
+    dispatch({ type: "delete", id: id });
   };
 
   return (
