@@ -1,9 +1,9 @@
 const Break = ({ breakTime }: { breakTime: number }) => {
   return (
-    <>
-      <span className="font-bold">Break earned</span>{" "}
+    <div className="mt-4">
+      <span className="font-semibold">Break time: </span>{" "}
       {formatMinuteText(breakTime)}
-    </>
+    </div>
   );
 };
 

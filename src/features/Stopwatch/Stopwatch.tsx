@@ -6,6 +6,7 @@ import { FaCoffee } from "react-icons/fa";
 import { RiSkipForwardFill } from "react-icons/ri";
 import { Badge } from "../../components/ui/badge";
 import { TbFocus2 } from "react-icons/tb";
+import { MdMotionPhotosPaused } from "react-icons/md";
 import buttonSound from "../../assets/button_click.mp3";
 import type { settingsType } from "../SettingsEditor/SettingsEditor.tsx";
 import useSoundEffect from "./useSoundEffect.ts";
@@ -17,7 +18,6 @@ const Stopwatch = ({ settings }: settingsType) => {
   const [mode, setMode] = useState<TimerMode>("idle");
   const [time, setTime] = useState(0);
   const [breakTime, setBreakTime] = useState(0);
-
   const lastTimestampRef = useRef(Date.now());
 
   const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
@@ -84,9 +84,9 @@ const Stopwatch = ({ settings }: settingsType) => {
 
   const startBreak = () => {
     buttonAudioRef.current?.play();
-    const breakDuration = BREAK_TIME;
+    const actualBreakDuration = BREAK_TIME > 1000 ? BREAK_TIME : 1500;
     setTime(0);
-    setBreakTime(breakDuration > 1000 ? breakDuration : 1500); // fallback
+    setBreakTime(actualBreakDuration);
     setMode("break");
   };
 
@@ -101,66 +101,83 @@ const Stopwatch = ({ settings }: settingsType) => {
   const { totalMinutes } = formatStopwatchTime(BREAK_TIME);
 
   return (
-    <>
-      <div>
-        <div>
-          {mode === "break" ? (
-            <div className="time-display text-6xl">
-              {formatted.hours !== "00" ? (
-                <span className="hours">{formattedBreak.hours}:</span>
-              ) : (
-                <span></span>
-              )}
-              <span className="minutes">{formattedBreak.minutes}:</span>
-              <span className="seconds">{formattedBreak.seconds}</span>
-            </div>
-          ) : (
-            <div className="time-display text-6xl">
-              {formatted.hours !== "00" && (
-                <span className="hours">{formatted.hours}:</span>
-              )}
-              <span className="minutes">{formatted.minutes}:</span>
-              <span className="seconds">{formatted.seconds}</span>
-            </div>
-          )}
+    <div>
+      <div className="flex flex-col items-center mb-4">
+        {mode === "focus" && (
+          <>
+            <Badge variant="outline">
+              Focus <TbFocus2 />
+            </Badge>
+          </>
+        )}
+        {mode === "break" && (
+          <>
+            <Badge variant="outline">
+              Break <FaCoffee />
+            </Badge>
+          </>
+        )}
+        {mode === "idle" && (
+          <>
+            <Badge variant="outline">
+              Idle <MdMotionPhotosPaused />
+            </Badge>
+          </>
+        )}
+      </div>
+      <div className="font-mono mb-2 flex flex-col items-center">
+        {mode === "break" ? (
+          <div className="time-display text-8xl">
+            {formatted.hours !== "00" ? (
+              <span className="hours">{formattedBreak.hours}:</span>
+            ) : (
+              <span></span>
+            )}
+            <span className="minutes">{formattedBreak.minutes}:</span>
+            <span className="seconds">{formattedBreak.seconds}</span>
+          </div>
+        ) : (
+          <div className="time-display text-8xl">
+            {formatted.hours !== "00" && (
+              <span className="hours">{formatted.hours}:</span>
+            )}
+            <span className="minutes">{formatted.minutes}:</span>
+            <span className="seconds">{formatted.seconds}</span>
+          </div>
+        )}
+        <div className="space-x-2">
           {mode === "focus" && (
             <>
-              <Button onClick={startBreak}>
+              <Button onClick={startBreak} size="lg">
                 <FaCoffee />
-              </Button>
-              <Button onClick={resetStopwatch}>
-                <FaRotateLeft />
               </Button>
             </>
           )}
           {mode === "break" && (
-            <Button onClick={resetStopwatch}>
+            <Button onClick={resetStopwatch} size="lg">
               <RiSkipForwardFill />
             </Button>
           )}
           {mode === "idle" && (
-            <Button onClick={startStopwatch}>
+            <Button onClick={startStopwatch} size="lg">
               <FaPlay />
             </Button>
           )}
+          <Button
+            onClick={resetStopwatch}
+            variant="outline"
+            size="lg"
+            disabled={mode !== "focus" && true}
+            className={`${mode !== "focus" && "cursor-not-allowed"}`}
+          >
+            <FaRotateLeft />
+          </Button>
         </div>
-        {mode === "focus" && (
-          <>
-            <Badge>
-              Focus <TbFocus2 />
-            </Badge>
-            <div>
-              <Break breakTime={totalMinutes} />
-            </div>
-          </>
-        )}
-        {mode === "break" && (
-          <Badge variant="secondary">
-            Break <FaCoffee />
-          </Badge>
-        )}
+        <div className={`${mode !== "focus" && "invisible"}`}>
+          <Break breakTime={totalMinutes} />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

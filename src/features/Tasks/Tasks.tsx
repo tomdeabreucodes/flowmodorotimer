@@ -50,18 +50,21 @@ const Tasks = () => {
         placeholder="New task"
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleNewTaskSubmission}
+        className="mb-4"
       />
-      {tasks.map((task) => {
-        return (
-          <Task
-            key={task.id}
-            task={task}
-            onComplete={handleTaskCompletion}
-            onActivate={handleTaskActivation}
-            onDelete={handleDeleteTask}
-          ></Task>
-        );
-      })}
+      <div className="space-y-2">
+        {tasks.map((task) => {
+          return (
+            <Task
+              key={task.id}
+              task={task}
+              onComplete={handleTaskCompletion}
+              onActivate={handleTaskActivation}
+              onDelete={handleDeleteTask}
+            ></Task>
+          );
+        })}
+      </div>
     </>
   );
 };
