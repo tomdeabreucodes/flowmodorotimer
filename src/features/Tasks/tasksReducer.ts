@@ -1,10 +1,13 @@
+import { arrayMove } from "@dnd-kit/sortable";
 import type { CryptoUUID, TaskType } from "./Tasks";
+import type { DragEndEvent } from "@dnd-kit/core";
 
 type TaskAction = {
-  type: "load" | "new" | "delete" | "complete" | "activate";
+  type: "load" | "new" | "delete" | "complete" | "activate" | "sort";
   id?: CryptoUUID;
   newTaskName?: string;
   audioRef?: React.RefObject<HTMLAudioElement | null>;
+  event?: DragEndEvent;
 };
 
 export default function tasksReducer(
@@ -35,6 +38,8 @@ export default function tasksReducer(
         if (task.id !== action.id) return task;
         const target_completed = !task.completed;
         if (target_completed && action.audioRef) {
+          console.log("COMPleetete");
+          console.log(action.audioRef.current?.play());
           action.audioRef.current?.play();
         }
         return { ...task, completed: target_completed };
@@ -60,6 +65,19 @@ export default function tasksReducer(
       }
       localStorage.setItem("tasks", JSON.stringify(updated));
       return updated;
+    }
+    case "sort": {
+      const { event: e } = action;
+      if (!e || !e.over) return tasks;
+      if (e.active.id !== e.over.id) {
+        const ids = tasks.map((task) => task.id);
+        const oldIndex = ids.indexOf(e.active.id as CryptoUUID);
+        const newIndex = ids.indexOf(e.over.id as CryptoUUID);
+        const updated = arrayMove(tasks, oldIndex, newIndex);
+        localStorage.setItem("tasks", JSON.stringify(updated));
+        return updated;
+      }
+      return tasks;
     }
   }
 }

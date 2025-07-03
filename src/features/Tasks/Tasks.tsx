@@ -3,6 +3,21 @@ import Task from "./Task";
 import { Input } from "../../components/ui/input";
 import tasksReducer from "./tasksReducer";
 import completionSound from "../../assets/completion.mp3";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  MouseSensor,
+  TouchSensor,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 export type CryptoUUID = `${string}-${string}-${string}-${string}-${string}`;
 export type TaskType = {
@@ -44,6 +59,29 @@ const Tasks = () => {
     dispatch({ type: "delete", id: id });
   };
 
+  function handleDragEnd(event: DragEndEvent) {
+    dispatch({ type: "sort", event: event });
+  }
+
+  const sensors = useSensors(
+    useSensor(MouseSensor, {
+      // Require the mouse to move by 10 pixels before activating
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
+    useSensor(TouchSensor, {
+      // Press delay of 250ms, with tolerance of 5px of movement
+      activationConstraint: {
+        delay: 250,
+        tolerance: 50,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
   return (
     <>
       <Input
@@ -55,19 +93,27 @@ const Tasks = () => {
         onKeyDown={handleNewTaskSubmission}
         className="mb-4"
       />
-      <div className="space-y-2 w-full">
-        {tasks.map((task) => {
-          return (
-            <Task
-              key={task.id}
-              task={task}
-              onComplete={handleTaskCompletion}
-              onActivate={handleTaskActivation}
-              onDelete={handleDeleteTask}
-            ></Task>
-          );
-        })}
-      </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
+          <div className="space-y-2 w-full">
+            {tasks.map((task) => {
+              return (
+                <Task
+                  key={task.id}
+                  task={task}
+                  onComplete={handleTaskCompletion}
+                  onActivate={handleTaskActivation}
+                  onDelete={handleDeleteTask}
+                ></Task>
+              );
+            })}
+          </div>
+        </SortableContext>
+      </DndContext>
     </>
   );
 };
