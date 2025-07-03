@@ -4,6 +4,7 @@ type TaskAction = {
   type: "load" | "new" | "delete" | "complete" | "activate";
   id?: CryptoUUID;
   newTaskName?: string;
+  audioRef?: React.RefObject<HTMLAudioElement | null>;
 };
 
 export default function tasksReducer(
@@ -30,9 +31,14 @@ export default function tasksReducer(
     }
     case "complete": {
       if (!action.id) return tasks;
-      const updated = tasks.map((task) =>
-        task.id === action.id ? { ...task, completed: !task.completed } : task
-      );
+      const updated = tasks.map((task) => {
+        if (task.id !== action.id) return task;
+        const target_completed = !task.completed;
+        if (target_completed && action.audioRef) {
+          action.audioRef.current?.play();
+        }
+        return { ...task, completed: target_completed };
+      });
       localStorage.setItem("tasks", JSON.stringify(updated));
       return updated;
     }

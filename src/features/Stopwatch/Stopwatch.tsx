@@ -24,7 +24,6 @@ const Stopwatch = ({ settings }: settingsType) => {
   const timerAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const timerSound = useSoundEffect(settings.soundEffect);
-  // console.log(timerSound);
 
   useEffect(() => {
     buttonAudioRef.current = new Audio(buttonSound);
@@ -125,9 +124,9 @@ const Stopwatch = ({ settings }: settingsType) => {
           </>
         )}
       </div>
-      <div className="font-mono mb-2 flex flex-col items-center">
+      <div className="mb-2 flex flex-col items-center">
         {mode === "break" ? (
-          <div className="time-display text-8xl">
+          <div className="time-display text-8xl mb-4">
             {formatted.hours !== "00" ? (
               <span className="hours">{formattedBreak.hours}:</span>
             ) : (
@@ -137,7 +136,7 @@ const Stopwatch = ({ settings }: settingsType) => {
             <span className="seconds">{formattedBreak.seconds}</span>
           </div>
         ) : (
-          <div className="time-display text-8xl">
+          <div className="time-display text-8xl mb-4">
             {formatted.hours !== "00" && (
               <span className="hours">{formatted.hours}:</span>
             )}
@@ -173,7 +172,11 @@ const Stopwatch = ({ settings }: settingsType) => {
             <FaRotateLeft />
           </Button>
         </div>
-        <div className={`${mode !== "focus" && "invisible"}`}>
+        <div
+          className={`${
+            mode !== "focus" ? "text-current/30" : "animate-pulse"
+          }`}
+        >
           <Break breakTime={totalMinutes} />
         </div>
       </div>

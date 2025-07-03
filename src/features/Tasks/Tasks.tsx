@@ -1,7 +1,8 @@
-import { useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useRef, useState } from "react";
 import Task from "./Task";
 import { Input } from "../../components/ui/input";
 import tasksReducer from "./tasksReducer";
+import completionSound from "../../assets/completion.mp3";
 
 export type CryptoUUID = `${string}-${string}-${string}-${string}-${string}`;
 export type TaskType = {
@@ -12,12 +13,14 @@ export type TaskType = {
 };
 
 const Tasks = () => {
-  // const [tasks, setTasks] = useState<TaskType[]>([]);
   const [tasks, dispatch] = useReducer(tasksReducer, []);
   const [inputValue, setInputValue] = useState("");
 
+  const completionAudioRef = useRef<HTMLAudioElement | null>(null);
+
   useEffect(() => {
     dispatch({ type: "load" });
+    completionAudioRef.current = new Audio(completionSound);
   }, []);
 
   const handleNewTaskSubmission = (
@@ -30,7 +33,7 @@ const Tasks = () => {
   };
 
   const handleTaskCompletion = (id: CryptoUUID) => {
-    dispatch({ type: "complete", id: id });
+    dispatch({ type: "complete", id: id, audioRef: completionAudioRef });
   };
 
   const handleTaskActivation = (id: CryptoUUID) => {
@@ -47,12 +50,12 @@ const Tasks = () => {
         id="newTaskInput"
         type="text"
         value={inputValue}
-        placeholder="New task"
+        placeholder="Add task name and hit enter..."
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleNewTaskSubmission}
         className="mb-4"
       />
-      <div className="space-y-2">
+      <div className="space-y-2 w-full">
         {tasks.map((task) => {
           return (
             <Task
