@@ -52,11 +52,8 @@ export default function SettingsEditor({ settings }: settingsType) {
           </DialogHeader>
           <Label className="font-semibold">Breaks</Label>
           <div className="flex mb-4">
-            <div className="flex">
-              <Label htmlFor="name-1" className="mr-2">
-                {" "}
-                Break Time = Focus Time ÷
-              </Label>
+            <div className="flex items-center">
+              <p className="mr-2"> Break Time = Focus Time ÷</p>
               <Input
                 id="breakTimeDivisor"
                 name="breakTimeDivisor"

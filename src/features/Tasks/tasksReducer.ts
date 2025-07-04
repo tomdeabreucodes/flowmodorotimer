@@ -38,8 +38,6 @@ export default function tasksReducer(
         if (task.id !== action.id) return task;
         const target_completed = !task.completed;
         if (target_completed && action.audioRef) {
-          console.log("COMPleetete");
-          console.log(action.audioRef.current?.play());
           action.audioRef.current?.play();
         }
         return { ...task, completed: target_completed };

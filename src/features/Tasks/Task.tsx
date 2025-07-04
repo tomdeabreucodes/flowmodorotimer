@@ -3,28 +3,35 @@ import { PiTarget } from "react-icons/pi";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { MdDragIndicator } from "react-icons/md";
 
 interface TaskProps {
   task: TaskType;
+  activeTask?: TaskType;
   onComplete: (id: CryptoUUID) => void;
   onActivate: (id: CryptoUUID) => void;
   onDelete: (id: CryptoUUID) => void;
+  onModify: (id: CryptoUUID) => void;
 }
 
-const Task = ({ task, onComplete, onActivate, onDelete }: TaskProps) => {
+const Task = ({
+  task,
+  onComplete,
+  onActivate,
+  onDelete,
+  activeTask,
+}: TaskProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: task.id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Translate.toString(transform),
     transition,
   };
   return (
     <div
       ref={setNodeRef}
       style={style}
-      {...attributes}
-      {...listeners}
       onClick={(e) => {
         if (e.target === e.currentTarget) {
           onActivate(task.id);
@@ -34,7 +41,7 @@ const Task = ({ task, onComplete, onActivate, onDelete }: TaskProps) => {
         task.active
           ? "border-1 border-cerulean-400 ring-4 ring-cerulean-400/30"
           : ""
-      }`}
+      } ${activeTask?.id === task.id && "invisible"}`}
     >
       <input
         type="checkbox"
@@ -44,14 +51,14 @@ const Task = ({ task, onComplete, onActivate, onDelete }: TaskProps) => {
         onChange={() => onComplete(task.id)}
         className="mr-3 accent-cerulean-400"
       />
-      <label
-        htmlFor={`task_${task.id}`}
+      <p
         className={`mr-auto max-w-3/4 ${
           task.completed && "text-current/50 line-through"
         }`}
       >
         {task.name}
-      </label>
+      </p>
+
       <FaRegTrashCan
         className="cursor-pointer text-red-600 sm:invisible group-hover:visible"
         onClick={() => onDelete(task.id)}
@@ -65,6 +72,11 @@ const Task = ({ task, onComplete, onActivate, onDelete }: TaskProps) => {
             : "sm:invisible group-hover:visible"
         }`}
         size={22}
+      />
+      <MdDragIndicator
+        {...attributes}
+        {...listeners}
+        className={`cursor-grab md:group-hover:block md:hidden`}
       />
     </div>
   );

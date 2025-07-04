@@ -12,6 +12,9 @@ import {
   type DragEndEvent,
   MouseSensor,
   TouchSensor,
+  type DragStartEvent,
+  DragOverlay,
+  type UniqueIdentifier,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -30,6 +33,16 @@ export type TaskType = {
 const Tasks = () => {
   const [tasks, dispatch] = useReducer(tasksReducer, []);
   const [inputValue, setInputValue] = useState("");
+  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const activeTask = tasks.find((task) => task.id === activeId);
+
+  let activeTaskPlaceholder;
+  if (activeTask) {
+    activeTaskPlaceholder = {
+      ...activeTask,
+      id: `${activeId}_copy` as CryptoUUID,
+    };
+  }
 
   const completionAudioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -61,19 +74,26 @@ const Tasks = () => {
 
   function handleDragEnd(event: DragEndEvent) {
     dispatch({ type: "sort", event: event });
+    setActiveId(null);
   }
+
+  function handleDragStart(event: DragStartEvent) {
+    setActiveId(event.active.id);
+  }
+
+  function handleModifyTask() {}
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
       // Require the mouse to move by 10 pixels before activating
       activationConstraint: {
-        distance: 10,
+        distance: 0,
       },
     }),
     useSensor(TouchSensor, {
       // Press delay of 250ms, with tolerance of 5px of movement
       activationConstraint: {
-        delay: 250,
+        delay: 0,
         tolerance: 50,
       },
     }),
@@ -97,22 +117,37 @@ const Tasks = () => {
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
+        onDragStart={handleDragStart}
       >
         <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-          <div className="space-y-2 w-full">
+          <div className="space-y-2 w-full h-full">
             {tasks.map((task) => {
               return (
                 <Task
                   key={task.id}
                   task={task}
+                  activeTask={activeTask}
                   onComplete={handleTaskCompletion}
                   onActivate={handleTaskActivation}
                   onDelete={handleDeleteTask}
+                  onModify={handleModifyTask}
                 ></Task>
               );
             })}
           </div>
         </SortableContext>
+        <DragOverlay>
+          {activeId && activeTaskPlaceholder ? (
+            <Task
+              key={activeTaskPlaceholder?.id}
+              task={activeTaskPlaceholder}
+              onComplete={handleTaskCompletion}
+              onActivate={handleTaskActivation}
+              onDelete={handleDeleteTask}
+              onModify={handleModifyTask}
+            ></Task>
+          ) : null}
+        </DragOverlay>
       </DndContext>
     </>
   );
