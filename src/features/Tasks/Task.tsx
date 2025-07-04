@@ -49,35 +49,41 @@ const Task = ({
         name="task"
         checked={task.completed}
         onChange={() => onComplete(task.id)}
-        className="mr-3 accent-cerulean-400"
+        className="mr-3 accent-cerulean-400 cursor-pointer"
       />
       <p
-        className={`mr-auto max-w-3/4 ${
+        className={`flex-1 break-words ${
           task.completed && "text-current/50 line-through"
         }`}
       >
         {task.name}
       </p>
 
-      <FaRegTrashCan
-        className="cursor-pointer text-red-600 sm:invisible group-hover:visible"
-        onClick={() => onDelete(task.id)}
-        size={16}
-      />
-      <PiTarget
-        onClick={() => onActivate(task.id)}
-        className={`cursor-pointer  ${
-          task.active
-            ? "text-cerulean-400 group-hover:visible"
-            : "sm:invisible group-hover:visible"
-        }`}
-        size={22}
-      />
-      <MdDragIndicator
-        {...attributes}
-        {...listeners}
-        className={`cursor-grab md:group-hover:block md:hidden`}
-      />
+      <span className="flex-shrink-0">
+        <FaRegTrashCan
+          className="cursor-pointer text-red-600 sm:invisible group-hover:visible"
+          onClick={() => onDelete(task.id)}
+          size={16}
+        />
+      </span>
+      <span className="flex-shrink-0">
+        <PiTarget
+          onClick={() => onActivate(task.id)}
+          className={`cursor-pointer  ${
+            task.active
+              ? "text-cerulean-400 group-hover:visible"
+              : "sm:invisible group-hover:visible"
+          }`}
+          size={22}
+        />
+      </span>
+      <span className="flex-shrink-0">
+        <MdDragIndicator
+          {...attributes}
+          {...listeners}
+          className={`cursor-move md:group-hover:block md:hidden`}
+        />
+      </span>
     </div>
   );
 };
