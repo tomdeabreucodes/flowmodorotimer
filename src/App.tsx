@@ -12,7 +12,7 @@ function App() {
         <FlowtimeNavigationMenu settings={settings} />
         <div className="container max-w-4xl mx-auto">
           <div className="mx-4 flex flex-col items-center">
-            <div className="flex flex-col container p-4 bg-secondary rounded-lg border max-w-lg">
+            <div className="flex flex-col container p-4 bg-secondary rounded-lg border max-w-lg mb-8">
               <Timer settings={settings} />
               <Tasks />
             </div>

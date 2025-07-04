@@ -3,11 +3,21 @@ import type { CryptoUUID, TaskType } from "./Tasks";
 import type { DragEndEvent } from "@dnd-kit/core";
 
 type TaskAction = {
-  type: "load" | "new" | "delete" | "complete" | "activate" | "sort";
+  type:
+    | "load"
+    | "new"
+    | "delete"
+    | "complete"
+    | "activate"
+    | "sort"
+    | "modify"
+    | "save_edit";
   id?: CryptoUUID;
   newTaskName?: string;
+  updatedTaskName?: string;
   audioRef?: React.RefObject<HTMLAudioElement | null>;
   event?: DragEndEvent;
+  setDraftEdit?: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export default function tasksReducer(
@@ -76,6 +86,32 @@ export default function tasksReducer(
         return updated;
       }
       return tasks;
+    }
+    case "modify": {
+      const updated = tasks.map((task) => {
+        if (task.id === action.id && action.setDraftEdit) {
+          action.setDraftEdit(task.name);
+        }
+
+        return {
+          ...task,
+          currentlyEditing: task.id === action.id ? true : false,
+        };
+      });
+
+      return updated;
+    }
+    case "save_edit": {
+      const updated = tasks.map((task) => {
+        if (!action.updatedTaskName) return task;
+        return {
+          ...task,
+          name: task.id === action.id ? action.updatedTaskName : task.name,
+          currentlyEditing: false,
+        };
+      });
+      localStorage.setItem("tasks", JSON.stringify(updated));
+      return updated;
     }
   }
 }

@@ -1,7 +1,7 @@
 const Break = ({ breakTime }: { breakTime: number }) => {
   return (
-    <div className="mt-4 text-sm">
-      <span className="">Accumulated break time: </span>{" "}
+    <div className="mt-4 mb-2 text-sm">
+      <span className="">Accumulated break time ≈ </span>{" "}
       <span>{formatMinuteText(breakTime)}</span>
     </div>
   );

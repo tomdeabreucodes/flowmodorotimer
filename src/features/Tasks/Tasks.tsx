@@ -28,6 +28,7 @@ export type TaskType = {
   name: string;
   completed: boolean;
   active: boolean;
+  currentlyEditing?: boolean;
 };
 
 const Tasks = () => {
@@ -35,6 +36,7 @@ const Tasks = () => {
   const [inputValue, setInputValue] = useState("");
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
   const activeTask = tasks.find((task) => task.id === activeId);
+  const [draftEdit, setDraftEdit] = useState("");
 
   let activeTaskPlaceholder;
   if (activeTask) {
@@ -81,7 +83,13 @@ const Tasks = () => {
     setActiveId(event.active.id);
   }
 
-  function handleModifyTask() {}
+  function handleModifyTask(id: CryptoUUID) {
+    dispatch({ type: "modify", id: id, setDraftEdit: setDraftEdit });
+  }
+
+  function handleSaveEdit(id: CryptoUUID) {
+    dispatch({ type: "save_edit", id: id, updatedTaskName: draftEdit });
+  }
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -104,15 +112,6 @@ const Tasks = () => {
 
   return (
     <>
-      <Input
-        id="newTaskInput"
-        type="text"
-        value={inputValue}
-        placeholder="Add task name and hit enter..."
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyDown={handleNewTaskSubmission}
-        className="mb-4"
-      />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -127,10 +126,13 @@ const Tasks = () => {
                   key={task.id}
                   task={task}
                   activeTask={activeTask}
+                  draftEdit={draftEdit}
+                  setDraftEdit={setDraftEdit}
                   onComplete={handleTaskCompletion}
                   onActivate={handleTaskActivation}
                   onDelete={handleDeleteTask}
                   onModify={handleModifyTask}
+                  onUnfocus={handleSaveEdit}
                 ></Task>
               );
             })}
@@ -141,14 +143,26 @@ const Tasks = () => {
             <Task
               key={activeTaskPlaceholder?.id}
               task={activeTaskPlaceholder}
+              draftEdit={draftEdit}
+              setDraftEdit={setDraftEdit}
               onComplete={handleTaskCompletion}
               onActivate={handleTaskActivation}
               onDelete={handleDeleteTask}
               onModify={handleModifyTask}
+              onUnfocus={handleSaveEdit}
             ></Task>
           ) : null}
         </DragOverlay>
       </DndContext>
+      <Input
+        id="newTaskInput"
+        type="text"
+        value={inputValue}
+        placeholder="Add task name and hit enter..."
+        onChange={(e) => setInputValue(e.target.value)}
+        onKeyDown={handleNewTaskSubmission}
+        className="mt-2"
+      />
     </>
   );
 };

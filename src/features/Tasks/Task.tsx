@@ -4,14 +4,19 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { MdDragIndicator } from "react-icons/md";
+import { Input } from "@/components/ui/input";
+import { useEffect, useRef } from "react";
 
 interface TaskProps {
   task: TaskType;
+  draftEdit: string;
+  setDraftEdit: React.Dispatch<React.SetStateAction<string>>;
   activeTask?: TaskType;
   onComplete: (id: CryptoUUID) => void;
   onActivate: (id: CryptoUUID) => void;
   onDelete: (id: CryptoUUID) => void;
   onModify: (id: CryptoUUID) => void;
+  onUnfocus: (id: CryptoUUID) => void;
 }
 
 const Task = ({
@@ -19,6 +24,10 @@ const Task = ({
   onComplete,
   onActivate,
   onDelete,
+  onModify,
+  onUnfocus,
+  draftEdit,
+  setDraftEdit,
   activeTask,
 }: TaskProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -28,6 +37,14 @@ const Task = ({
     transform: CSS.Translate.toString(transform),
     transition,
   };
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+    inputRef.current?.select();
+  }, [task.currentlyEditing]);
+
   return (
     <div
       ref={setNodeRef}
@@ -51,14 +68,23 @@ const Task = ({
         onChange={() => onComplete(task.id)}
         className="mr-3 accent-cerulean-400 cursor-pointer"
       />
-      <p
-        className={`flex-1 break-words ${
-          task.completed && "text-current/50 line-through"
-        }`}
-      >
-        {task.name}
-      </p>
-
+      {task.currentlyEditing ? (
+        <Input
+          ref={inputRef}
+          value={draftEdit}
+          onBlur={() => onUnfocus(task.id)}
+          onChange={(e) => setDraftEdit(e.target.value)}
+        ></Input>
+      ) : (
+        <p
+          className={`flex-1 break-words ${
+            task.completed && "text-current/50 line-through"
+          }`}
+          onClick={() => onModify(task.id)}
+        >
+          {task.name}
+        </p>
+      )}
       <span className="flex-shrink-0">
         <FaRegTrashCan
           className="cursor-pointer text-red-600 sm:invisible group-hover:visible"
