@@ -57,7 +57,10 @@ export default function tasksReducer(
     }
     case "activate": {
       const updated = tasks.map((task) => {
-        return { ...task, active: task.id === action.id ? true : false };
+        return {
+          ...task,
+          active: task.id === action.id && !task.active ? true : false,
+        };
       });
       localStorage.setItem("tasks", JSON.stringify(updated));
       return updated;
