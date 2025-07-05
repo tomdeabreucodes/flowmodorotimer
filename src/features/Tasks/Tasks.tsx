@@ -132,7 +132,7 @@ const Tasks = () => {
                   onActivate={handleTaskActivation}
                   onDelete={handleDeleteTask}
                   onModify={handleModifyTask}
-                  onUnfocus={handleSaveEdit}
+                  onSaveEdit={handleSaveEdit}
                 ></Task>
               );
             })}
@@ -149,7 +149,7 @@ const Tasks = () => {
               onActivate={handleTaskActivation}
               onDelete={handleDeleteTask}
               onModify={handleModifyTask}
-              onUnfocus={handleSaveEdit}
+              onSaveEdit={handleSaveEdit}
             ></Task>
           ) : null}
         </DragOverlay>

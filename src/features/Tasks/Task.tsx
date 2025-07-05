@@ -16,7 +16,7 @@ interface TaskProps {
   onActivate: (id: CryptoUUID) => void;
   onDelete: (id: CryptoUUID) => void;
   onModify: (id: CryptoUUID) => void;
-  onUnfocus: (id: CryptoUUID) => void;
+  onSaveEdit: (id: CryptoUUID) => void;
 }
 
 const Task = ({
@@ -25,7 +25,7 @@ const Task = ({
   onActivate,
   onDelete,
   onModify,
-  onUnfocus,
+  onSaveEdit,
   draftEdit,
   setDraftEdit,
   activeTask,
@@ -44,6 +44,15 @@ const Task = ({
     inputRef.current?.focus();
     inputRef.current?.select();
   }, [task.currentlyEditing]);
+
+  function handleSaveEnter(
+    e: React.KeyboardEvent<HTMLInputElement>,
+    id: CryptoUUID
+  ) {
+    if (e.key === "Enter") {
+      onSaveEdit(id);
+    }
+  }
 
   return (
     <div
@@ -72,8 +81,9 @@ const Task = ({
         <Input
           ref={inputRef}
           value={draftEdit}
-          onBlur={() => onUnfocus(task.id)}
+          onBlur={() => onSaveEdit(task.id)}
           onChange={(e) => setDraftEdit(e.target.value)}
+          onKeyDown={(e) => handleSaveEnter(e, task.id)}
         ></Input>
       ) : (
         <p
