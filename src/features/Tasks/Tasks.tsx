@@ -119,7 +119,7 @@ const Tasks = () => {
         onDragStart={handleDragStart}
       >
         <SortableContext items={tasks} strategy={verticalListSortingStrategy}>
-          <div className="space-y-2 w-full h-full">
+          <div className="space-y-2 w-full h-full mt-4">
             {tasks.map((task) => {
               return (
                 <Task

@@ -30,6 +30,7 @@ export default function SettingsEditor({ settings }: settingsType) {
     const draftSettings = {
       breakTimeDivisor: settings.draftBreakTimeDivisor,
       soundEffect: settings.draftSoundEffect,
+      taskSectionVisible: settings.taskSectionVisible,
     };
     localStorage.setItem("flowtime_settings", JSON.stringify(draftSettings));
     settings.setBreakTimeDivisor(settings.draftBreakTimeDivisor);
