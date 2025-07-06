@@ -50,7 +50,11 @@ export default function tasksReducer(
         if (target_completed && action.audioRef) {
           action.audioRef.current?.play();
         }
-        return { ...task, completed: target_completed };
+        return {
+          ...task,
+          completed: target_completed,
+          active: target_completed ? false : task.active,
+        };
       });
       localStorage.setItem("tasks", JSON.stringify(updated));
       return updated;
