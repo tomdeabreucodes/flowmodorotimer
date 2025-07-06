@@ -21,6 +21,7 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
+import type { Settings } from "../SettingsEditor/SettingsEditor";
 
 export type CryptoUUID = `${string}-${string}-${string}-${string}-${string}`;
 export type TaskType = {
@@ -30,8 +31,15 @@ export type TaskType = {
   active: boolean;
   currentlyEditing?: boolean;
 };
+type FocusedTaskState = {
+  focusedTaskState: [
+    TaskType | null,
+    React.Dispatch<React.SetStateAction<TaskType | null>>
+  ];
+  settings: Settings;
+};
 
-const Tasks = () => {
+const Tasks = ({ focusedTaskState, settings }: FocusedTaskState) => {
   const [tasks, dispatch] = useReducer(tasksReducer, []);
   const [inputValue, setInputValue] = useState("");
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -52,6 +60,14 @@ const Tasks = () => {
     dispatch({ type: "load" });
     completionAudioRef.current = new Audio(completionSound);
   }, []);
+
+  const [, setFocusedTask] = focusedTaskState;
+
+  useEffect(() => {
+    const activeTask = tasks.find((task) => task.active) || null;
+
+    setFocusedTask(activeTask);
+  }, [tasks, setFocusedTask]);
 
   const handleNewTaskSubmission = (
     e: React.KeyboardEvent<HTMLInputElement>
@@ -109,9 +125,10 @@ const Tasks = () => {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+  console.log(settings.taskSectionVisible);
 
   return (
-    <>
+    <div className={`${!settings.taskSectionVisible && "hidden"}`}>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -163,7 +180,7 @@ const Tasks = () => {
         onKeyDown={handleNewTaskSubmission}
         className="mt-2"
       />
-    </>
+    </div>
   );
 };
 
