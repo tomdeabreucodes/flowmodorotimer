@@ -1,5 +1,4 @@
 {
   "name": "flowmodorotimer-cloudflare",
-  "compatibility_date": "2025-04-03",
-  "main": "./src/main.tsx"
+  "compatibility_date": "2025-04-03"
 }
