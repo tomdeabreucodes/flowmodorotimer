@@ -124,7 +124,7 @@ const Stopwatch = ({ settings }: settingsType) => {
           </>
         )}
       </div>
-      <div className="mb-2 flex flex-col items-center">
+      <div className="mb-2 flex flex-col items-center font-mono">
         {mode === "break" ? (
           <div className="time-display text-8xl mb-4">
             {formatted.hours !== "00" ? (
@@ -144,7 +144,7 @@ const Stopwatch = ({ settings }: settingsType) => {
             <span className="seconds">{formatted.seconds}</span>
           </div>
         )}
-        <div className="space-x-2">
+        <div className="space-x-2 font-mono">
           {mode === "focus" && (
             <>
               <Button onClick={startBreak} size="lg">
