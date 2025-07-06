@@ -59,6 +59,7 @@ export default function SettingsEditor({ settings }: settingsType) {
                 id="breakTimeDivisor"
                 name="breakTimeDivisor"
                 value={settings.draftBreakTimeDivisor}
+                min={1}
                 onChange={(e) =>
                   settings.setDraftBreakTimeDivisor(e.target.valueAsNumber)
                 }
