@@ -56,7 +56,7 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center mb-16 sm:mb-8 space-x-4">
+        <div className="flex justify-center mb-8 space-x-4">
           <a
             target="_blank"
             href="https://github.com/tomdeabreucodes/flowmodorotimer"
