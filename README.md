@@ -1,54 +1,40 @@
-# React + TypeScript + Vite
+# Flowmodoro Timer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple timer app to help you achieve and maintain flow state.
 
-Currently, two official plugins are available:
+## What is 'Flowmodoro'?
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Flowmodoro is a more flexible variant of the [Pomodoro Technique](https://en.wikipedia.org/wiki/Pomodoro_Technique), optimising for achieving and maintaining a [flow state](https://www.theguardian.com/science/article/2024/jul/20/flow-state-science-creativity-psychology-focus).
 
-## Expanding the ESLint configuration
+- Instead of leveraging focus sessions and breaks with fixed times, **you decide** when the focus session ends once you feel like you need a break. 
+  
+- The break time is then calculated, proportionate to the length of the focus session (In other words, the longer the focus session, the longer the break).
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Crucially, the technique also emphasises the importance of [unitasking](https://www.psychologytoday.com/us/blog/the-path-to-passionate-happiness/202309/do-the-one-thing-that-matters). Pick one task which will remain your focus until you can check it off. Break it down into smaller sub-tasks if needed.
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Features
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. Timer
+   - Focus mode - stopwatch counting up from 0
+   - Break mode - counts down to 0 from calculated break time (e.g. for 1 hour worked; 12 minutes break)
+2. Todo list
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+That's it. No fluff.
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Even the todo list feature is optional and can be hidden if preferred.
+
+## Configuration
+
+- Break time divisor (default: `5`)
+  - This is the number used to calculate your break time
+  - The formula is `focus time / break time divisor = break time` 
+  - e.g. 1 hour of focus / 5 = 12 minutes break
+- Timer sound effect (default: `simple chime`)
+  - Select your preferred sound effect
+  - This will play each time your break time expires
+
+## Connect
+
+![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/subpixelsw)
+![Static Badge](https://img.shields.io/badge/Bluesky-0285FF?logo=bluesky&logoColor=white&link=https%3A%2F%2Fbsky.app%2Fprofile%2Fsubpixelsoftware.bsky.social)
+![Substack badge](https://img.shields.io/badge/Substack-FF6719?logo=substack&logoColor=white&link=https%3A%2F%2Fsubpixelsoftware.substack.com%2F)

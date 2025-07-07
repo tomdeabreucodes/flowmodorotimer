@@ -125,7 +125,6 @@ const Tasks = ({ focusedTaskState, settings }: FocusedTaskState) => {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
-  console.log(settings.taskSectionVisible);
 
   return (
     <div className={`${!settings.taskSectionVisible && "hidden"}`}>
