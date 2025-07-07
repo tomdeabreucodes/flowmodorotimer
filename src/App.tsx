@@ -21,7 +21,7 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-svh sm:min-h-screen flex flex-col">
         <div className="flex-1 flex flex-col items-center px-4">
           <div className="max-w-4xl w-full">
             <FlowtimeNavigationMenu settings={settings} />
