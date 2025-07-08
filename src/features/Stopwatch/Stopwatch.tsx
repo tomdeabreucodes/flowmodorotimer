@@ -147,18 +147,30 @@ const Stopwatch = ({ settings }: settingsType) => {
         <div className="space-x-2 font-mono">
           {mode === "focus" && (
             <>
-              <Button onClick={startBreak} size="lg">
+              <Button
+                onClick={startBreak}
+                size="lg"
+                aria-description="Start break time"
+              >
                 <FaCoffee />
               </Button>
             </>
           )}
           {mode === "break" && (
-            <Button onClick={resetStopwatch} size="lg">
+            <Button
+              onClick={resetStopwatch}
+              size="lg"
+              aria-description="Skip break and reset timer to 0"
+            >
               <RiSkipForwardFill />
             </Button>
           )}
           {mode === "idle" && (
-            <Button onClick={startStopwatch} size="lg">
+            <Button
+              onClick={startStopwatch}
+              size="lg"
+              aria-description="Start stopwatch"
+            >
               <FaPlay />
             </Button>
           )}
@@ -168,6 +180,7 @@ const Stopwatch = ({ settings }: settingsType) => {
             size="lg"
             disabled={mode !== "focus" && true}
             className={`${mode !== "focus" && "cursor-not-allowed"}`}
+            aria-description="Reset timer to 0"
           >
             <FaRotateLeft />
           </Button>

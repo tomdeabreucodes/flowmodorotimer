@@ -21,6 +21,19 @@ function App() {
 
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <title>Simple Flowmodoro Timer</title>
+      <meta
+        name="description"
+        content="A simple flowmodoro (aka flowtime technique) timer to help you achieve and maintain flow state. Ideal for students, professionals, and remote workers. All the benefits of Pomodoro Technique, but without the untimely interruptions when you're just getting into a flow."
+      />
+      <meta property="og:title" content="Simple Flowmodoro Timer" />
+      <meta
+        property="og:image"
+        content="https://flowmodorotimer.com/assets/FlowmodoroTimer.png"
+      />
+      <meta property="og:type" content="website" />
+      <meta property="og:site_name" content="Simple Flowmodoro Timer" />
+      <meta property="og:locale" content="en_GB" />
       <div className="min-h-svh sm:min-h-screen flex flex-col">
         <div className="flex-1 flex flex-col items-center px-4">
           <div className="max-w-4xl w-full">
@@ -61,7 +74,10 @@ function App() {
             target="_blank"
             href="https://github.com/tomdeabreucodes/flowmodorotimer"
           >
-            <Button>
+            <Button
+              className="cursor-pointer"
+              aria-description="Star the repo on GitHub"
+            >
               <FaGithub />
               Star <FaRegStar />
             </Button>
