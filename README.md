@@ -1,6 +1,6 @@
 <img src="https://github.com/user-attachments/assets/867fe157-cc97-4171-ad5a-e52c0e0c11c6" width="500">
 
-# Flowmodoro Timer
+# Simple Flowmodoro Timer
 
 A simple timer app to help you achieve and maintain flow state.
 
