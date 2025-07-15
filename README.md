@@ -37,6 +37,5 @@ Even the todo list feature is optional and can be hidden if preferred.
 
 ## Connect
 
-![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/subpixelsw)
 ![Static Badge](https://img.shields.io/badge/Bluesky-0285FF?logo=bluesky&logoColor=white&link=https%3A%2F%2Fbsky.app%2Fprofile%2Fsubpixelsoftware.bsky.social)
 ![Substack badge](https://img.shields.io/badge/Substack-FF6719?logo=substack&logoColor=white&link=https%3A%2F%2Fsubpixelsoftware.substack.com%2F)
