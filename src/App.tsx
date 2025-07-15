@@ -56,7 +56,26 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="flex justify-center mb-8 space-x-4">
+        <div className="flex flex-col justify-center mb-8 space-x-4 items-center space-y-4">
+          <a
+            href="https://www.producthunt.com/products/simple-flowmodoro-timer?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-simple&#0045;flowmodoro&#0045;timer"
+            target="_blank"
+          >
+            <img
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=992883&theme=light&t=1752564522837"
+              alt="Simple&#0032;Flowmodoro&#0032;Timer - A&#0032;simple&#0032;timer&#0032;app&#0032;to&#0032;help&#0032;you&#0032;achieve&#0032;&#0038;&#0032;maintain&#0032;flow&#0032;state | Product Hunt"
+              width="250"
+              height="54"
+              className="block dark:hidden"
+            />
+            <img
+              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=992883&theme=dark&t=1752564522837"
+              alt="Simple&#0032;Flowmodoro&#0032;Timer - A&#0032;simple&#0032;timer&#0032;app&#0032;to&#0032;help&#0032;you&#0032;achieve&#0032;&#0038;&#0032;maintain&#0032;flow&#0032;state | Product Hunt"
+              width="250"
+              height="54"
+              className="hidden dark:block"
+            />
+          </a>
           <a
             target="_blank"
             href="https://github.com/tomdeabreucodes/flowmodorotimer"
