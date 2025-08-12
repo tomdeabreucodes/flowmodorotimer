@@ -8,6 +8,7 @@ import { useState } from "react";
 import { PiTarget } from "react-icons/pi";
 import { FaGithub } from "react-icons/fa";
 import { Button } from "./components/ui/button";
+import { FaBluesky } from "react-icons/fa6";
 
 function App() {
   const focusedTaskState = useState<TaskType | null>(null);
@@ -58,36 +59,48 @@ function App() {
         </div>
         <div className="flex flex-col justify-center mb-8 space-x-4 items-center space-y-4">
           <a
-            href="https://www.producthunt.com/products/simple-flowmodoro-timer?embed=true&utm_source=badge-featured&utm_medium=badge&utm_source=badge-simple&#0045;flowmodoro&#0045;timer"
+            href="https://fazier.com/launches/flowmodorotimer.com"
             target="_blank"
           >
             <img
-              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=992883&theme=light&t=1752564522837"
-              alt="Simple&#0032;Flowmodoro&#0032;Timer - A&#0032;simple&#0032;timer&#0032;app&#0032;to&#0032;help&#0032;you&#0032;achieve&#0032;&#0038;&#0032;maintain&#0032;flow&#0032;state | Product Hunt"
+              src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=dark"
               width="250"
-              height="54"
-              className="block dark:hidden"
-            />
-            <img
-              src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=992883&theme=dark&t=1752564522837"
-              alt="Simple&#0032;Flowmodoro&#0032;Timer - A&#0032;simple&#0032;timer&#0032;app&#0032;to&#0032;help&#0032;you&#0032;achieve&#0032;&#0038;&#0032;maintain&#0032;flow&#0032;state | Product Hunt"
-              width="250"
-              height="54"
+              alt="Fazier badge"
               className="hidden dark:block"
             />
+            <img
+              src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=neutral"
+              width="250"
+              alt="Fazier badge"
+              className="block dark:hidden"
+            />
           </a>
-          <a
-            target="_blank"
-            href="https://github.com/tomdeabreucodes/flowmodorotimer"
-          >
-            <Button
-              className="cursor-pointer"
-              aria-description="Star the repo on GitHub"
+          <div className="flex items-center gap-2">
+            <a
+              target="_blank"
+              href="https://github.com/tomdeabreucodes/flowmodorotimer"
             >
-              <FaGithub />
-              Star <FaRegStar />
-            </Button>
-          </a>
+              <Button
+                className="cursor-pointer"
+                aria-description="Star the repo on GitHub"
+              >
+                <FaGithub />
+                Star <FaRegStar />
+              </Button>
+            </a>
+            <a
+              target="_blank"
+              href="https://bsky.app/profile/subpixelsoftware.bsky.social"
+            >
+              <Button
+                className="cursor-pointer bg-[#0285FF]"
+                aria-description="Star the repo on GitHub"
+              >
+                <FaBluesky />
+                Follow
+              </Button>
+            </a>
+          </div>
         </div>
       </div>
     </ThemeProvider>
