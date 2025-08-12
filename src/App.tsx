@@ -93,7 +93,7 @@ function App() {
               href="https://bsky.app/profile/subpixelsoftware.bsky.social"
             >
               <Button
-                className="cursor-pointer bg-[#0285FF]"
+                className="cursor-pointer bg-[#0285FF] text-white"
                 aria-description="Star the repo on GitHub"
               >
                 <FaBluesky />
