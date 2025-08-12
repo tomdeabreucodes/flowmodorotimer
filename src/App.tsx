@@ -58,7 +58,7 @@ function App() {
           </div>
         </div>
         <div className="flex flex-col justify-center mb-8 space-x-4 items-center space-y-4">
-          <a
+          {/* <a
             href="https://fazier.com/launches/flowmodorotimer.com"
             target="_blank"
           >
@@ -74,7 +74,7 @@ function App() {
               alt="Fazier badge"
               className="block dark:hidden"
             />
-          </a>
+          </a> */}
           <div className="flex items-center gap-2">
             <a
               target="_blank"
