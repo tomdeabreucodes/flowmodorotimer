@@ -3,12 +3,10 @@ import { ThemeProvider } from "@/components/theme-provider";
 import Tasks, { type TaskType } from "./features/Tasks/Tasks";
 import useSettings from "./features/SettingsEditor/hooks/useSettings";
 import { FlowtimeNavigationMenu } from "./components/flowtime-nav";
-import { FaRegEyeSlash, FaRegEye, FaRegStar } from "react-icons/fa";
+import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import { useState } from "react";
 import { PiTarget } from "react-icons/pi";
-import { FaGithub } from "react-icons/fa";
-import { Button } from "./components/ui/button";
-import { FaXTwitter } from "react-icons/fa6";
+import Footer from "./components/footer";
 
 function App() {
   const focusedTaskState = useState<TaskType | null>(null);
@@ -57,51 +55,7 @@ function App() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col justify-center mb-2 space-x-4 items-center space-y-4">
-          <a
-            href="https://open-launch.com/projects/simple-flowmodoro-timer"
-            target="_blank"
-            title="Open-Launch Top 3 Daily Winner"
-          >
-            <img
-              src="https://open-launch.com/images/badges/top3-light.svg"
-              alt="Open-Launch Top 3 Daily Winner"
-              style={{ width: "195px", height: "auto" }}
-              className="block dark:hidden"
-            />
-            <img
-              src="https://open-launch.com/images/badges/top3-dark.svg"
-              alt="Open-Launch Top 3 Daily Winner"
-              style={{ width: "195px", height: "auto" }}
-              className="hidden dark:block"
-            />
-          </a>
-        </div>
-        <div className="flex flex-col justify-center mb-8 space-x-4 items-center space-y-4">
-          <div className="flex items-center gap-2">
-            <a
-              target="_blank"
-              href="https://github.com/tomdeabreucodes/flowmodorotimer"
-            >
-              <Button
-                className="cursor-pointer"
-                aria-description="Star the repo on GitHub"
-              >
-                <FaGithub />
-                Star <FaRegStar />
-              </Button>
-            </a>
-            <a target="_blank" href="https://x.com/subpixelsw">
-              <Button
-                className="cursor-pointer"
-                aria-description="Star the repo on GitHub"
-              >
-                <FaXTwitter />
-                Follow
-              </Button>
-            </a>
-          </div>
-        </div>
+        <Footer />
       </div>
     </ThemeProvider>
   );
