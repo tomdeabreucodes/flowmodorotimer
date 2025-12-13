@@ -78,23 +78,6 @@ function App() {
           </a>
         </div>
         <div className="flex flex-col justify-center mb-8 space-x-4 items-center space-y-4">
-          {/* <a
-            href="https://fazier.com/launches/flowmodorotimer.com"
-            target="_blank"
-          >
-            <img
-              src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=dark"
-              width="250"
-              alt="Fazier badge"
-              className="hidden dark:block"
-            />
-            <img
-              src="https://fazier.com/api/v1//public/badges/launch_badges.svg?badge_type=featured&theme=neutral"
-              width="250"
-              alt="Fazier badge"
-              className="block dark:hidden"
-            />
-          </a> */}
           <div className="flex items-center gap-2">
             <a
               target="_blank"
