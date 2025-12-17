@@ -16,6 +16,7 @@ import { FaCog } from "react-icons/fa";
 import type useSettings from "./hooks/useSettings";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import type { SoundEffect } from "../Stopwatch/useSoundEffect";
+import { Switch } from "@/components/ui/switch";
 
 export type Settings = ReturnType<typeof useSettings>;
 
@@ -30,11 +31,13 @@ export default function SettingsEditor({ settings }: settingsType) {
     const draftSettings = {
       breakTimeDivisor: settings.draftBreakTimeDivisor,
       soundEffect: settings.draftSoundEffect,
+      autoplay: settings.draftAutoplay,
       taskSectionVisible: settings.taskSectionVisible,
     };
     localStorage.setItem("flowtime_settings", JSON.stringify(draftSettings));
     settings.setBreakTimeDivisor(settings.draftBreakTimeDivisor);
     settings.setSoundEffect(settings.draftSoundEffect);
+    settings.setAutoplay(settings.draftAutoplay);
     setOpen(false);
   };
 
@@ -69,7 +72,7 @@ export default function SettingsEditor({ settings }: settingsType) {
             </div>
           </div>
           <Label className="font-semibold mb-4">Sound effect</Label>
-          <div className="mb-4">
+          <div className="mb-8">
             <RadioGroup
               defaultValue={settings.draftSoundEffect}
               onValueChange={(value) =>
@@ -89,6 +92,14 @@ export default function SettingsEditor({ settings }: settingsType) {
                 <Label htmlFor="r3">Egg timer</Label>
               </div>
             </RadioGroup>
+          </div>
+          <div className="flex items-center space-x-2 mb-8">
+            <Switch
+              id="autoplay"
+              defaultChecked={settings.draftAutoplay}
+              onCheckedChange={(checked) => settings.setDraftAutoplay(checked)}
+            />
+            <Label htmlFor="autoplay">Autoplay next focus session</Label>
           </div>
           <DialogFooter>
             <DialogClose asChild>

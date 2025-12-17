@@ -25,6 +25,8 @@ const Stopwatch = ({ settings }: settingsType) => {
 
   const timerSound = useSoundEffect(settings.soundEffect);
 
+  const autoplayEnabled = settings.autoplay;
+
   useEffect(() => {
     buttonAudioRef.current = new Audio(buttonSound);
   }, []);
@@ -55,7 +57,11 @@ const Stopwatch = ({ settings }: settingsType) => {
           const updated = time - delta;
           if (updated <= 0) {
             timerAudioRef.current?.play();
-            setMode("idle");
+            if (autoplayEnabled) {
+              setMode("focus");
+            } else {
+              setMode("idle");
+            }
             return 0;
           }
           return updated;
@@ -71,7 +77,7 @@ const Stopwatch = ({ settings }: settingsType) => {
         clearInterval(interval);
       }
     };
-  }, [mode]);
+  }, [mode, autoplayEnabled]);
 
   const startStopwatch = () => {
     buttonAudioRef.current?.play();

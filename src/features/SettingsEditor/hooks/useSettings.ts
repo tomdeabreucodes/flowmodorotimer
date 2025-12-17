@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 type localStorageSettings = {
   breakTimeDivisor?: number;
   soundEffect?: SoundEffect;
+  autoplay?: boolean;
   taskSectionVisible?: boolean;
 };
 
@@ -15,6 +16,9 @@ export default function useSettings() {
   const [soundEffect, setSoundEffect] = useState<SoundEffect>("simple_chime");
   const [draftSoundEffect, setDraftSoundEffect] =
     useState<SoundEffect>("simple_chime");
+
+  const [autoplay, setAutoplay] = useState<boolean>(false);
+  const [draftAutoplay, setDraftAutoplay] = useState<boolean>(false);
 
   const [taskSectionVisible, setTaskSectionVisible] = useState(true);
 
@@ -29,6 +33,10 @@ export default function useSettings() {
       const parsedSoundEffect = parsedSettings["soundEffect"];
       setSoundEffect(parsedSoundEffect);
       setDraftSoundEffect(parsedSoundEffect);
+
+      const parsedAutoplay = parsedSettings["autoplay"] || false;
+      setAutoplay(parsedAutoplay);
+      setDraftAutoplay(parsedAutoplay);
 
       const parsedTaskVisibility = parsedSettings["taskSectionVisible"];
       setTaskSectionVisible(parsedTaskVisibility);
@@ -53,6 +61,10 @@ export default function useSettings() {
     setSoundEffect,
     draftSoundEffect,
     setDraftSoundEffect,
+    autoplay,
+    setAutoplay,
+    draftAutoplay,
+    setDraftAutoplay,
     taskSectionVisible,
     setTaskSectionVisible,
     updateTaskVisibility,
