@@ -27,9 +27,9 @@ const Stopwatch = ({ settings }: settingsType) => {
 
   const autoplayEnabled = settings.autoplay;
 
-  useEffect(() => {
+  if (typeof window !== "undefined") {
     buttonAudioRef.current = new Audio(buttonSound);
-  }, []);
+  }
 
   useEffect(() => {
     if (!timerSound) return;
