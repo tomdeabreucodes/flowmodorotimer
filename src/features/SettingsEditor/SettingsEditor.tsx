@@ -32,6 +32,7 @@ export default function SettingsEditor({ settings }: settingsType) {
       breakTimeDivisor: settings.draftBreakTimeDivisor,
       soundEffect: settings.draftSoundEffect,
       autoplay: settings.draftAutoplay,
+      autoNextTask: settings.draftAutoNextTask,
       taskSectionVisible: settings.taskSectionVisible,
     };
     localStorage.setItem("flowtime_settings", JSON.stringify(draftSettings));
@@ -93,13 +94,21 @@ export default function SettingsEditor({ settings }: settingsType) {
               </div>
             </RadioGroup>
           </div>
-          <div className="flex items-center space-x-2 mb-8">
+          <div className="flex items-center space-x-2 mb-4">
             <Switch
               id="autoplay"
               defaultChecked={settings.draftAutoplay}
               onCheckedChange={(checked) => settings.setDraftAutoplay(checked)}
             />
             <Label htmlFor="autoplay">Autoplay next focus session</Label>
+          </div>
+          <div className="flex items-center space-x-2 mb-8">
+            <Switch
+              id="autoNextTask"
+              defaultChecked={settings.draftAutoNextTask}
+              onCheckedChange={(checked) => settings.setDraftAutoNextTask(checked)}
+            />
+            <Label htmlFor="autoNextTask">Auto-advance to next task</Label>
           </div>
           <DialogFooter>
             <DialogClose asChild>
