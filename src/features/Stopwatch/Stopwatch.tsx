@@ -14,7 +14,10 @@ import useSoundEffect from "./useSoundEffect.ts";
 type Interval = NodeJS.Timeout | null;
 type TimerMode = "idle" | "focus" | "break";
 
-const Stopwatch = ({ settings }: settingsType) => {
+const Stopwatch = ({
+  settings,
+  onBreakEnd,
+}: settingsType & { onBreakEnd?: () => void }) => {
   const [mode, setMode] = useState<TimerMode>("idle");
   const [time, setTime] = useState(0);
   const [breakTime, setBreakTime] = useState(0);
@@ -57,6 +60,9 @@ const Stopwatch = ({ settings }: settingsType) => {
           const updated = time - delta;
           if (updated <= 0) {
             timerAudioRef.current?.play();
+            if (settings.autoNextTask) {
+              onBreakEnd?.();
+            }
             if (autoplayEnabled) {
               setMode("focus");
             } else {
@@ -77,7 +83,7 @@ const Stopwatch = ({ settings }: settingsType) => {
         clearInterval(interval);
       }
     };
-  }, [mode, autoplayEnabled]);
+  }, [mode, autoplayEnabled, settings.autoNextTask, onBreakEnd]);
 
   const startStopwatch = () => {
     buttonAudioRef.current?.play();
