@@ -5,6 +5,8 @@ type localStorageSettings = {
   breakTimeDivisor?: number;
   soundEffect?: SoundEffect;
   autoplay?: boolean;
+  autoNextTask?: boolean;
+  autoNextTaskOnComplete?: boolean;
   taskSectionVisible?: boolean;
 };
 
@@ -19,6 +21,12 @@ export default function useSettings() {
 
   const [autoplay, setAutoplay] = useState<boolean>(false);
   const [draftAutoplay, setDraftAutoplay] = useState<boolean>(false);
+
+  const [autoNextTask, setAutoNextTask] = useState<boolean>(false);
+  const [draftAutoNextTask, setDraftAutoNextTask] = useState<boolean>(false);
+
+  const [autoNextTaskOnComplete, setAutoNextTaskOnComplete] = useState<boolean>(false);
+  const [draftAutoNextTaskOnComplete, setDraftAutoNextTaskOnComplete] = useState<boolean>(false);
 
   const [taskSectionVisible, setTaskSectionVisible] = useState(true);
 
@@ -37,6 +45,14 @@ export default function useSettings() {
       const parsedAutoplay = parsedSettings["autoplay"] || false;
       setAutoplay(parsedAutoplay);
       setDraftAutoplay(parsedAutoplay);
+
+      const parsedAutoNextTask = parsedSettings["autoNextTask"] || false;
+      setAutoNextTask(parsedAutoNextTask);
+      setDraftAutoNextTask(parsedAutoNextTask);
+
+      const parsedAutoNextTaskOnComplete = parsedSettings["autoNextTaskOnComplete"];
+      setAutoNextTaskOnComplete(parsedAutoNextTaskOnComplete === true);
+      setDraftAutoNextTaskOnComplete(parsedAutoNextTaskOnComplete === true);
 
       const parsedTaskVisibility = parsedSettings["taskSectionVisible"];
       setTaskSectionVisible(parsedTaskVisibility);
@@ -65,6 +81,14 @@ export default function useSettings() {
     setAutoplay,
     draftAutoplay,
     setDraftAutoplay,
+    autoNextTask,
+    setAutoNextTask,
+    draftAutoNextTask,
+    setDraftAutoNextTask,
+    autoNextTaskOnComplete,
+    setAutoNextTaskOnComplete,
+    draftAutoNextTaskOnComplete,
+    setDraftAutoNextTaskOnComplete,
     taskSectionVisible,
     setTaskSectionVisible,
     updateTaskVisibility,

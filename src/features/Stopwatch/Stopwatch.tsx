@@ -14,14 +14,18 @@ import useSoundEffect from "./useSoundEffect.ts";
 type Interval = NodeJS.Timeout | null;
 type TimerMode = "idle" | "focus" | "break";
 
-const Stopwatch = ({ settings }: settingsType) => {
-  const [mode, setMode] = useState<TimerMode>("idle");
-  const [time, setTime] = useState(0);
-  const [breakTime, setBreakTime] = useState(0);
-  const lastTimestampRef = useRef(Date.now());
+ const Stopwatch = ({
+   settings,
+   onBreakEnd,
+ }: settingsType & { onBreakEnd?: () => void }) => {
+   const [mode, setMode] = useState<TimerMode>("idle");
+   const [time, setTime] = useState(0);
+   const [breakTime, setBreakTime] = useState(0);
+   const lastTimestampRef = useRef(Date.now());
 
-  const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
-  const timerAudioRef = useRef<HTMLAudioElement | null>(null);
+   const buttonAudioRef = useRef<HTMLAudioElement | null>(null);
+   const timerAudioRef = useRef<HTMLAudioElement | null>(null);
+   const breakEndedRef = useRef(false);
 
   const timerSound = useSoundEffect(settings.soundEffect);
 
@@ -36,48 +40,53 @@ const Stopwatch = ({ settings }: settingsType) => {
     timerAudioRef.current = timerSound;
   }, [timerSound]);
 
-  useEffect(() => {
-    let interval: Interval = null;
-    lastTimestampRef.current = Date.now();
+   useEffect(() => {
+     let interval: Interval = null;
+     lastTimestampRef.current = Date.now();
 
-    if (mode === "focus") {
-      interval = setInterval(() => {
-        const now = Date.now();
-        const delta = now - lastTimestampRef.current;
-        lastTimestampRef.current = now;
-        setTime((time) => time + delta);
-      }, 100);
-    } else if (mode === "break") {
-      interval = setInterval(() => {
-        const now = Date.now();
-        const delta = now - lastTimestampRef.current;
-        lastTimestampRef.current = now;
+     if (mode === "focus") {
+       interval = setInterval(() => {
+         const now = Date.now();
+         const delta = now - lastTimestampRef.current;
+         lastTimestampRef.current = now;
+         setTime((time) => time + delta);
+       }, 100);
+     } else if (mode === "break") {
+       breakEndedRef.current = false;
+       interval = setInterval(() => {
+         const now = Date.now();
+         const delta = now - lastTimestampRef.current;
+         lastTimestampRef.current = now;
 
-        setBreakTime((time) => {
-          const updated = time - delta;
-          if (updated <= 0) {
-            timerAudioRef.current?.play();
-            if (autoplayEnabled) {
-              setMode("focus");
-            } else {
-              setMode("idle");
-            }
-            return 0;
-          }
-          return updated;
-        });
-      }, 100);
-    } else {
-      if (interval) {
-        clearInterval(interval);
-      }
-    }
-    return () => {
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-  }, [mode, autoplayEnabled]);
+         setBreakTime((time) => {
+           const updated = time - delta;
+           if (updated <= 0 && !breakEndedRef.current) {
+             breakEndedRef.current = true;
+             timerAudioRef.current?.play();
+             if (settings.autoNextTask) {
+               onBreakEnd?.();
+             }
+             if (autoplayEnabled) {
+               setMode("focus");
+             } else {
+               setMode("idle");
+             }
+             return 0;
+           }
+           return updated;
+         });
+       }, 100);
+     } else {
+       if (interval) {
+         clearInterval(interval);
+       }
+     }
+     return () => {
+       if (interval) {
+         clearInterval(interval);
+       }
+     };
+   }, [mode, autoplayEnabled, settings.autoNextTask, onBreakEnd]);
 
   const startStopwatch = () => {
     buttonAudioRef.current?.play();

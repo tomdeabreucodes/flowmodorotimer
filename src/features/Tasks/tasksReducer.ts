@@ -9,6 +9,7 @@ type TaskAction = {
     | "delete"
     | "complete"
     | "activate"
+    | "activate_next"
     | "sort"
     | "modify"
     | "save_edit";
@@ -18,6 +19,7 @@ type TaskAction = {
   audioRef?: React.RefObject<HTMLAudioElement | null>;
   event?: DragEndEvent;
   setDraftEdit?: React.Dispatch<React.SetStateAction<string>>;
+  autoAdvance?: boolean;
 };
 
 export default function tasksReducer(
@@ -42,23 +44,40 @@ export default function tasksReducer(
 
       return updated;
     }
-    case "complete": {
-      if (!action.id) return tasks;
-      const updated = tasks.map((task) => {
-        if (task.id !== action.id) return task;
-        const target_completed = !task.completed;
-        if (target_completed && action.audioRef) {
-          action.audioRef.current?.play();
-        }
-        return {
-          ...task,
-          completed: target_completed,
-          active: target_completed ? false : task.active,
-        };
-      });
-      localStorage.setItem("tasks", JSON.stringify(updated));
-      return updated;
-    }
+     case "complete": {
+       if (!action.id) return tasks;
+       const completedIndex = tasks.findIndex((task) => task.id === action.id);
+       const wasUncompleted = !tasks[completedIndex]?.completed;
+       const wasActive = tasks[completedIndex]?.active;
+       const updated = tasks.map((task) => {
+         if (task.id !== action.id) return task;
+         const target_completed = !task.completed;
+         if (target_completed && action.audioRef) {
+           action.audioRef.current?.play();
+         }
+         return {
+           ...task,
+           completed: target_completed,
+           active: target_completed ? false : task.active,
+         };
+       });
+       if (wasUncompleted && wasActive && action.autoAdvance === true) {
+         let nextActiveId: CryptoUUID | null = null;
+         for (let i = completedIndex + 1; i < updated.length; i++) {
+           if (!updated[i].completed) {
+             nextActiveId = updated[i].id;
+             break;
+           }
+         }
+         if (nextActiveId) {
+           for (let i = 0; i < updated.length; i++) {
+             updated[i] = { ...updated[i], active: updated[i].id === nextActiveId };
+           }
+         }
+       }
+       localStorage.setItem("tasks", JSON.stringify(updated));
+       return updated;
+     }
     case "activate": {
       const updated = tasks.map((task) => {
         return {
@@ -68,6 +87,31 @@ export default function tasksReducer(
       });
       localStorage.setItem("tasks", JSON.stringify(updated));
       return updated;
+    }
+    case "activate_next": {
+      const activeIndex = tasks.findIndex((task) => task.active);
+      const startIndex = activeIndex === -1 ? 0 : activeIndex + 1;
+      for (let i = startIndex; i < tasks.length; i++) {
+        if (!tasks[i].completed) {
+          const updated = tasks.map((task) => ({
+            ...task,
+            active: task.id === tasks[i].id,
+          }));
+          localStorage.setItem("tasks", JSON.stringify(updated));
+          return updated;
+        }
+      }
+      for (let i = 0; i < startIndex; i++) {
+        if (!tasks[i].completed) {
+          const updated = tasks.map((task) => ({
+            ...task,
+            active: task.id === tasks[i].id,
+          }));
+          localStorage.setItem("tasks", JSON.stringify(updated));
+          return updated;
+        }
+      }
+      return tasks;
     }
     case "delete": {
       const targetTask = tasks.find((task) => task.id === action.id);
