@@ -33,12 +33,15 @@ export default function SettingsEditor({ settings }: settingsType) {
       soundEffect: settings.draftSoundEffect,
       autoplay: settings.draftAutoplay,
       autoNextTask: settings.draftAutoNextTask,
+      autoNextTaskOnComplete: settings.draftAutoNextTaskOnComplete,
       taskSectionVisible: settings.taskSectionVisible,
     };
     localStorage.setItem("flowtime_settings", JSON.stringify(draftSettings));
     settings.setBreakTimeDivisor(settings.draftBreakTimeDivisor);
     settings.setSoundEffect(settings.draftSoundEffect);
     settings.setAutoplay(settings.draftAutoplay);
+    settings.setAutoNextTask(settings.draftAutoNextTask);
+    settings.setAutoNextTaskOnComplete(settings.draftAutoNextTaskOnComplete);
     setOpen(false);
   };
 
@@ -94,22 +97,31 @@ export default function SettingsEditor({ settings }: settingsType) {
               </div>
             </RadioGroup>
           </div>
-          <div className="flex items-center space-x-2 mb-4">
-            <Switch
-              id="autoplay"
-              defaultChecked={settings.draftAutoplay}
-              onCheckedChange={(checked) => settings.setDraftAutoplay(checked)}
-            />
-            <Label htmlFor="autoplay">Autoplay next focus session</Label>
-          </div>
-          <div className="flex items-center space-x-2 mb-8">
-            <Switch
-              id="autoNextTask"
-              defaultChecked={settings.draftAutoNextTask}
-              onCheckedChange={(checked) => settings.setDraftAutoNextTask(checked)}
-            />
-            <Label htmlFor="autoNextTask">Auto-advance to next task</Label>
-          </div>
+           <Label className="font-semibold">Auto behavior</Label>
+           <div className="flex items-center space-x-2 mb-4 mt-2">
+             <Switch
+               id="autoplay"
+               defaultChecked={settings.draftAutoplay}
+               onCheckedChange={(checked) => settings.setDraftAutoplay(checked)}
+             />
+             <Label htmlFor="autoplay">Autoplay next focus session after break</Label>
+           </div>
+           <div className="flex items-center space-x-2 mb-4">
+             <Switch
+               id="autoNextTask"
+               defaultChecked={settings.draftAutoNextTask}
+               onCheckedChange={(checked) => settings.setDraftAutoNextTask(checked)}
+             />
+             <Label htmlFor="autoNextTask">Auto-advance task after break ends</Label>
+           </div>
+           <div className="flex items-center space-x-2 mb-8">
+             <Switch
+               id="autoNextTaskOnComplete"
+               defaultChecked={settings.draftAutoNextTaskOnComplete}
+               onCheckedChange={(checked) => settings.setDraftAutoNextTaskOnComplete(checked)}
+             />
+             <Label htmlFor="autoNextTaskOnComplete">Auto-advance task when marking as completed</Label>
+           </div>
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
