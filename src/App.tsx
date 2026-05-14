@@ -4,7 +4,7 @@ import Tasks, { type TaskType } from "./features/Tasks/Tasks";
 import useSettings from "./features/SettingsEditor/hooks/useSettings";
 import { FlowtimeNavigationMenu } from "./components/flowtime-nav";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PiTarget } from "react-icons/pi";
 import Footer from "./components/footer";
 
@@ -12,6 +12,17 @@ function App() {
   const focusedTaskState = useState<TaskType | null>(null);
   const [focusedTask] = focusedTaskState;
   const settings = useSettings();
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        document.getElementById("newTaskInput")?.focus();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, []);
 
   function handleHideTaskSection() {
     settings.setTaskSectionVisible(!settings.taskSectionVisible);
